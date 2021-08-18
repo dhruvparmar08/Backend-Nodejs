@@ -2,7 +2,8 @@ var User = require('../model/model');
 var path = require("path");
 var jwt = require('jsonwebtoken');
 var secret = 'harrypotter';
-const upload = require('../middleware/upload')
+const fs = require('fs');
+const upload = require('../middleware/upload');
 
 module.exports = function(router){
     
@@ -61,7 +62,8 @@ module.exports = function(router){
     router.get('/allproducts', (req, res) => {
         User.find({}).exec(function(err, user) {
             if(err) throw err;
-            if(!user) {
+            console.log(user.length);
+            if(!user || user.length === 0 ) {
                 res.status(401).json({ message: 'Product not found' });
             } else {
                 res.status(200).json({ data: user });
@@ -115,7 +117,12 @@ module.exports = function(router){
             if(!user) {
                 res.status(401).json({ message: 'Product not found' });
             } else {
-                res.status(200).json({ message: 'Product Successfully Deleted !!!' });
+                try {
+                    fs.unlinkSync(`upload/${user.image}`);
+                    res.status(200).json({ message: 'Product Successfully Deleted !!!' });
+                } catch (e) {
+                    res.status(400).send({ message: "Error deleting image!", error: e.toString(), req: req.body });
+                }
             }
         })
     })

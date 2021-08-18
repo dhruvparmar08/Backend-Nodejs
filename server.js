@@ -20,7 +20,7 @@ app.use('/api',appRoutes);
 app.use('/upload',express.static('upload'));
 app.use('/upload',express.static('/upload'));
 
-mongoose.connect('mongodb+srv://mongodbuser:mongodbuser@cluster0-mvmyh.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true,  useCreateIndex: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://mongodbuser:mongodbuser@cluster0-mvmyh.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true,  useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false });
 var conn = mongoose.connection;
 
 conn.on('connected', function(){
